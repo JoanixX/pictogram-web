@@ -6,3 +6,5 @@ pydantic
 python-dotenv
 httpx
 Pillow
+passlib[bcrypt]
+python-jose[cryptography]

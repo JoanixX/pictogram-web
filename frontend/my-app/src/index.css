@@ -13,6 +13,25 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+  color: #242424;
+}
+
+input {
+  flex: content;
+  color: #242424;
+}
+
+header {
+  background: #1a1a1a;
+  padding: 1.2rem 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 1.5rem;
+  border-radius: 30px;
+}
 a {
   font-weight: 500;
   color: #646cff;
@@ -33,6 +52,15 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  color:#213547
+}
+
+h3 {
+  font-size: 1.5em;
+  line-height: 1.2;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  color:#213547
 }
 
 button {

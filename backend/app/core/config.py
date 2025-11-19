@@ -5,6 +5,7 @@ load_dotenv()
 
 class Settings:
     PROJECT_NAME: str = "Pictogram AI Backend"
-    DATABASE_URL: str = os.getenv("DATABASE_URL")
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./test.db")
+
 
 settings = Settings()
