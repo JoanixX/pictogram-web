@@ -26,74 +26,30 @@ export const ChatRoom = ({ username, roomId }: ChatRoomProps) => {
     };
   }, [roomId, username]);
 
-  const sendMessage = async () => {
+  const sendMessage = () => {
     if (input.trim() && ws.current) {
-      // 1. Fetch pictograms first
-      try {
-        const response = await fetch("http://127.0.0.1:8001/recommend/convert", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ selected: input.split(" ") }),
-        });
-        const data = await response.json();
-        const pictograms = data.pictograms;
-
-        // 2. Send pictograms as content (serialized)
-        // If no pictograms found, send text as fallback (or handle as you wish)
-        const contentToSend = pictograms.length > 0 ? JSON.stringify(pictograms) : input;
-        
-        ws.current.send(JSON.stringify({ content: contentToSend, type: "message" }));
-        setInput("");
-      } catch (error) {
-        console.error("Error fetching pictograms:", error);
-        // Fallback to sending raw text if error
-        ws.current.send(JSON.stringify({ content: input, type: "message" }));
-        setInput("");
-      }
+      ws.current.send(JSON.stringify({ content: input, type: "message" }));
+      setInput("");
     }
-  };
-
-  const renderMessageContent = (content: string) => {
-    try {
-      const pictos = JSON.parse(content);
-      if (Array.isArray(pictos) && pictos.length > 0 && pictos[0].url) {
-        return (
-          <div className="flex flex-wrap gap-2">
-            {pictos.map((p: any, i: number) => (
-              <div key={i} className="flex flex-col items-center">
-                <img src={p.url} alt={p.palabra} className="w-16 h-16 bg-white rounded-md" />
-                <span className="text-[10px] font-bold capitalize mt-1">{p.palabra}</span>
-              </div>
-            ))}
-          </div>
-        );
-      }
-    } catch (e) {
-      // Not JSON or not pictograms, render as text
-    }
-    return <p>{content}</p>;
   };
 
   return (
-    <Card className="h-[600px] flex flex-col p-4 bg-card/95 backdrop-blur-sm border-2 border-border shadow-xl">
-      <div className="mb-4 border-b pb-2 flex justify-between items-center">
-        <div>
-          <h2 className="text-xl font-bold gradient-primary bg-clip-text text-transparent">Sala: {roomId}</h2>
-          <p className="text-sm text-muted-foreground">Usuario: {username}</p>
-        </div>
-        <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" title="Conectado" />
+    <Card className="h-[600px] flex flex-col p-4">
+      <div className="mb-4 border-b pb-2">
+        <h2 className="text-xl font-bold">Sala: {roomId}</h2>
+        <p className="text-sm text-muted-foreground">Usuario: {username}</p>
       </div>
       
-      <div className="flex-1 pr-4 overflow-y-auto custom-scrollbar">
+      <div className="flex-1 pr-4 overflow-y-auto">
         <div className="space-y-4">
           {messages.map((msg, i) => (
             <div key={i} className={`flex ${msg.user === username ? "justify-end" : "justify-start"}`}>
-              <div className={`max-w-[80%] rounded-2xl p-4 shadow-sm ${
-                msg.type === "system" ? "bg-muted text-center w-full text-xs rounded-lg py-2" :
-                msg.user === username ? "bg-primary text-primary-foreground rounded-tr-none" : "bg-secondary text-secondary-foreground rounded-tl-none"
+              <div className={`max-w-[80%] rounded-lg p-3 ${
+                msg.type === "system" ? "bg-muted text-center w-full text-xs" :
+                msg.user === username ? "bg-primary text-primary-foreground" : "bg-secondary"
               }`}>
-                {msg.type !== "system" && <p className="text-xs font-bold mb-2 opacity-80">{msg.user}</p>}
-                {renderMessageContent(msg.content)}
+                {msg.type !== "system" && <p className="text-xs font-bold mb-1">{msg.user}</p>}
+                <p>{msg.content}</p>
               </div>
             </div>
           ))}
@@ -105,10 +61,9 @@ export const ChatRoom = ({ username, roomId }: ChatRoomProps) => {
           value={input} 
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={(e) => e.key === "Enter" && sendMessage()}
-          placeholder="Escribe un mensaje para convertir a pictogramas..."
-          className="rounded-xl border-2 focus-visible:ring-primary/50"
+          placeholder="Escribe un mensaje..."
         />
-        <Button onClick={sendMessage} className="rounded-xl px-6">Enviar</Button>
+        <Button onClick={sendMessage}>Enviar</Button>
       </div>
     </Card>
   );
