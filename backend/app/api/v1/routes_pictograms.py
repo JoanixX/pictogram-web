@@ -9,7 +9,6 @@ from app.services.prediction_service import PredictionService
 
 router = APIRouter(prefix="/pictograms", tags=["Pictograms"])
 
-
 @router.post("/predict", response_model=PredictionOut, status_code=status.HTTP_201_CREATED)
 async def predict_image(
     user_id: int,

@@ -2,7 +2,7 @@ import httpx
 
 class AIClient:
     def __init__(self):
-        self.url = "http://localhost:9000/predict"
+        self.url = "http://localhost:8001/api/predict"
 
     async def predict(self, image_bytes):
         async with httpx.AsyncClient() as client:

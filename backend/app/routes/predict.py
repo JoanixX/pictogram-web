@@ -11,6 +11,7 @@ router = APIRouter()
 # CARGA DEL MODELO Y CLASES
 # =============================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# Go up two levels from app/routes to app, then to models
 MODEL_PATH = os.path.join(BASE_DIR, "..", "models", "pictogram_mobilenet.keras")
 CLASS_MAP_PATH = os.path.join(BASE_DIR, "..", "models", "classes.txt")
 

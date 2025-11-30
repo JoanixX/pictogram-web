@@ -12,8 +12,9 @@ router = APIRouter()
 # Carga del modelo de pictogramas
 # =============================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = r"D:\User\onedrive\Documentos\IA_web_proyect\pictogram-web\backend\app\models\pictogram_mobilenet.keras"
-CLASS_MAP_PATH = r"D:\User\onedrive\Documentos\IA_web_proyect\pictogram-web\backend\app\models\classes.txt"
+# Go up two levels from app/api/v1 to app, then to models
+MODEL_PATH = os.path.join(BASE_DIR, "..", "..", "models", "pictogram_mobilenet.keras")
+CLASS_MAP_PATH = os.path.join(BASE_DIR, "..", "..", "models", "classes.txt")
 
 model = tf.keras.models.load_model(MODEL_PATH)
 
