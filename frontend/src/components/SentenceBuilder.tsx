@@ -20,7 +20,7 @@ export const SentenceBuilder = () => {
     setLoading(true);
     try {
       const words = currentSentence.map(p => p.palabra);
-      const response = await fetch("http://127.0.0.1:8001/recommend/", {
+      const response = await fetch(`${import.meta.env.VITE_AI_URL}/recommend/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ selected: words }),

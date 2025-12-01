@@ -16,7 +16,7 @@ export const AuthForm = ({ onLogin }: AuthFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const endpoint = isLogin ? "http://127.0.0.1:8001/auth/token" : "http://127.0.0.1:8001/auth/register";
+    const endpoint = isLogin ? `${import.meta.env.VITE_BACKEND_URL}/auth/token` : `${import.meta.env.VITE_BACKEND_URL}/auth/register`;
     
     try {
       let body;

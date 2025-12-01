@@ -11,3 +11,5 @@ python-jose[cryptography]
 ollama
 tensorflow
 gunicorn
+spacy
+numpy<2

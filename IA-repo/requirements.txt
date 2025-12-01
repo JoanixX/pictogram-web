@@ -2,3 +2,7 @@ fastapi
 uvicorn
 requests
 spacy
+tensorflow
+numpy<2
+pillow
+python-multipart

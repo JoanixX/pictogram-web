@@ -15,6 +15,12 @@ app.add_middleware(
 )
 
 app.include_router(recommend_router)
+from app.routers.search import router as search_router
+app.include_router(search_router)
+from app.routers.quiz import router as quiz_router
+app.include_router(quiz_router)
+from app.routers.predict import router as predict_router
+app.include_router(predict_router)
 
 from app.core.arasaac import search_pictograms
 

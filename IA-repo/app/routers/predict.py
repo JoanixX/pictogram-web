@@ -11,28 +11,38 @@ router = APIRouter()
 # CARGA DEL MODELO Y CLASES
 # =============================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# Go up two levels from app/routes to app, then to models
+# Assuming models are in IA-repo/app/models
 MODEL_PATH = os.path.join(BASE_DIR, "..", "models", "pictogram_mobilenet.keras")
 CLASS_MAP_PATH = os.path.join(BASE_DIR, "..", "models", "classes.txt")
 
-print("Cargando modelo...")
-model = tf.keras.models.load_model(MODEL_PATH)
-print("Modelo cargado.")
+print(f"Loading model from: {MODEL_PATH}")
+try:
+    model = tf.keras.models.load_model(MODEL_PATH)
+    print("Modelo cargado.")
+except Exception as e:
+    print(f"Error loading model: {e}")
+    model = None
 
 # Cargar mapeo class_id -> nombre
 class_map = {}
-with open(CLASS_MAP_PATH, "r", encoding="utf-8") as f:
-    for line in f:
-        idx, name = line.strip().split(":")
-        class_map[int(idx)] = name
+try:
+    with open(CLASS_MAP_PATH, "r", encoding="utf-8") as f:
+        for line in f:
+            idx, name = line.strip().split(":")
+            class_map[int(idx)] = name
+except Exception as e:
+    print(f"Error loading class map: {e}")
 
 IMG_SIZE = (224, 224)
 
 # =============================
 # ENDPOINT
 # =============================
-@router.post("/predict")
+@router.post("/api/predict")
 async def predict_image(file: UploadFile = File(...)):
+    if not model:
+        return {"error": "Model not loaded"}
+
     # Leer bytes
     img_bytes = await file.read()
     img = Image.open(io.BytesIO(img_bytes)).convert("RGB")
@@ -46,7 +56,7 @@ async def predict_image(file: UploadFile = File(...)):
     preds = model.predict(img_array)
     class_id = int(np.argmax(preds[0]))
     confidence = float(np.max(preds[0]))
-    class_name = class_map[class_id]
+    class_name = class_map.get(class_id, "Unknown")
 
     return {
         "class_id": class_id,
